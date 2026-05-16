@@ -1,0 +1,38 @@
+MAILTO=suwako
+* * * * * echo "Test" > /tmp/cron_test.txt
+
+30   3   *   *   *   /bin/bash /var/vmail/backup/backup_mysql.sh
+
+# iRedAPD: Clean up expired tracking records hourly.
+1   *   *   *   *   python3 /opt/iredapd/tools/cleanup_db.py >/dev/null
+
+# iRedAPD: Convert SPF DNS record of specified domain names to IP
+#          addresses/networks hourly.
+2   *   *   *   *   python3 /opt/iredapd/tools/spf_to_greylist_whitelists.py >/dev/null
+
+# iRedMail: Cleanup Amavisd database
+1   2   *   *   *   python3 /opt/www/iredadmin/tools/cleanup_amavisd_db.py >/dev/null
+
+# iRedAdmin: Clean up sql database.
+1   *   *   *   *   python3 /opt/www/iredadmin/tools/cleanup_db.py >/dev/null 2>&1
+
+# iRedAdmin: Delete mailboxes on file system which belong to removed accounts.
+1   *   *   *   *   python3 /opt/www/iredadmin/tools/delete_mailboxes.py
+# iRedMail: Cleanup Roundcube SQL database
+2   2   *   *   *   /usr/bin/php /opt/www/roundcubemail/bin/cleandb.sh >/dev/null
+
+# iRedMail: Cleanup Roundcube temporary files under 'temp/' directory
+2   2   *   *   *   /usr/bin/php /opt/www/roundcubemail/bin/gc.sh >/dev/null
+# iRedMail: Backup SOGo data databases on 04:01AM
+1   4   *   *   *   /bin/bash /var/vmail/backup/backup_sogo.sh
+
+# Fail2ban: Unban IP addresses pending for removal (stored in SQL db).
+* * * * * /bin/bash /usr/local/bin/fail2ban_banned_db unban_db
+
+0 0  * * * /root/sync-vmail-backup.sh
+0 6  * * * /root/sync-vmail-backup.sh
+0 12 * * * /root/sync-vmail-backup.sh
+0 18 * * * /root/sync-vmail-backup.sh
+0 2  * * 0 /bin/sh /root/update_certs.sh
+0 8  * * 2 /bin/sh /root/update_pkgs.sh
+0 8  * * 5 /bin/sh /root/update_pkgs.sh
