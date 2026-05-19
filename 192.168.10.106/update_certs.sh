@@ -1,8 +1,9 @@
 #!/bin/sh
 
 DATE=$(date +"%Y年%m月%d日")
+IP=$(ifconfig wg0 | awk '/inet / {print $2; exit}')
 
-echo "192.168.10.106 SSL証明書が更新されました。 (${DATE})
+echo "${IP} SSL証明書が更新されました。 (${DATE})
 ---------------
 " > /root/cert.txt
 
@@ -26,5 +27,5 @@ cp -v /etc/ssl/private/076.moe.key /etc/prosody/certs/ >> /root/cert.txt
 /etc/rc.d/httpd start >> /root/cert.txt
 /etc/rc.d/prosody restart >> /root/cert.txt
 
-cat /root/cert.txt | mail -s "192.168.10.106 SSL証明書更新 (${DATE})" reports@076.ne.jp
+cat /root/cert.txt | mail -s "${IP} SSL証明書更新 (${DATE})" reports@076.ne.jp
 rm -rf /root/cert.txt

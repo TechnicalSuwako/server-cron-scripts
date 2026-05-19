@@ -1,8 +1,9 @@
 #!/bin/sh
 
 DATE=$(date +"%Y年%m月%d日")
+IP=$(ifconfig wg0 | awk '/inet / {print $2; exit}')
 
-echo "192.168.10.104から192.168.10.143へメールバックアップが正常にプッシュされました。 (${DATE})
+echo "${IP}から192.168.10.143へメールバックアップが正常にプッシュされました。 (${DATE})
 ---------------
 " > /home/suwako/mailbckp.txt
 
@@ -14,5 +15,5 @@ doas -u suwako rsync -vaHz --delete /home/suwako/vmail/mail.076.co.jp 192.168.0.
 echo "０７６スタジオ（ネットワーク）" >> /home/suwako/mailbckp.txt
 doas -u suwako rsync -vaHz --delete /home/suwako/vmail/mail.076.ne.jp 192.168.0.143:/zroot/vmail >> /home/suwako/mailbckp.txt
 
-cat /home/suwako/mailbckp.txt | mail -s "192.168.10.104 メールバックアップをNASへプッシュ (${DATE})" reports@076.ne.jp
+cat /home/suwako/mailbckp.txt | mail -s "${IP} メールバックアップをNASへプッシュ (${DATE})" reports@076.ne.jp
 rm -rf /home/suwako/mailbckp.txt

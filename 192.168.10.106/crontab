@@ -18,6 +18,10 @@ HOME=/var/log
 
 #~      *        *      *       *       -ns rpki-client -v && bgpctl reload
 0   2  *  * 0 /root/update_certs.sh
+0   6  *  * 1 /root/go-update.sh
+0   6  *  * 4 /root/go-update.sh
+0   6  *  * 3 /root/zig-update.sh
+0   6  *  * 6 /root/zig-update.sh
 0   8  *  * 2 /root/update_pkgs.sh
 0   8  *  * 5 /root/update_pkgs.sh
 */5 *  *  * * /root/check_relayd.sh

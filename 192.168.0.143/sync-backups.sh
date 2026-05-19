@@ -1,8 +1,9 @@
 #!/bin/sh
 
 DATE=$(date +"%Y年%m月%d日")
+IP=$(ifconfig re0 | awk '/inet / {print $2; exit}')
 
-echo "192.168.0.143 NASバックアップが同期されました。 (${DATE})
+echo "${IP} NASバックアップが同期されました。 (${DATE})
 ---------------
 " > /root/sync.txt
 
@@ -22,5 +23,5 @@ rsync -vaHzop --delete /yroot/repo /xroot >> /root/sync.txt
 rsync -vaHzop --delete /yroot/got /xroot >> /root/sync.txt
 rsync -vaHzop --delete /yroot/svn /xroot >> /root/sync.txt
 
-cat /root/sync.txt | mail -s "192.168.0.143 バックアップ同期 (${DATE})" reports@076.ne.jp
+cat /root/sync.txt | mail -s "${IP} バックアップ同期 (${DATE})" reports@076.ne.jp
 rm -rf /root/sync.txt

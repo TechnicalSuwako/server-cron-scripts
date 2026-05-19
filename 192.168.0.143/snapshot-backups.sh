@@ -1,8 +1,9 @@
 #!/bin/sh
 
 DATE=$(date +"%Y年%m月%d日")
+IP=$(ifconfig re0 | awk '/inet / {print $2; exit}')
 
-echo "192.168.0.143 NASバックアップのスナップショットが作成されました。 (${DATE})
+echo "${IP} NASバックアップのスナップショットが作成されました。 (${DATE})
 ---------------
 " > /root/snap.txt
 
@@ -36,5 +37,5 @@ echo "スナップショット一覧：
 " >> /root/snap.txt
 zfs list -t snapshot >> /root/snap.txt
 
-cat /root/snap.txt | mail -s "192.168.0.143 スナップショットバックアップ (${DATE})" reports@076.ne.jp
+cat /root/snap.txt | mail -s "${IP} スナップショットバックアップ (${DATE})" reports@076.ne.jp
 rm -rf /root/snap.txt

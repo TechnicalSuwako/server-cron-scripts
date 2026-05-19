@@ -1,8 +1,9 @@
 #!/bin/sh
 
 DATE=$(date +"%Y年%m月%d日")
+IP=$(ifconfig re0 | awk '/inet / {print $2; exit}')
 
-echo "192.168.0.143 NASパッケージが更新されました。 (${DATE})
+echo "${IP}NASパッケージが更新されました。 (${DATE})
 ---------------
 " > /root/pkg.txt
 
@@ -10,5 +11,5 @@ echo "192.168.0.143 NASパッケージが更新されました。 (${DATE})
 /usr/sbin/pkg upgrade -y >> /root/pkg.txt
 /usr/sbin/freebsd-update cron >> /root/pkg.txt
 
-cat /root/pkg.txt | mail -s "192.168.0.143 パッケージ更新 (${DATE})" reports@076.ne.jp
+cat /root/pkg.txt | mail -s "${IP} パッケージ更新 (${DATE})" reports@076.ne.jp
 rm -rf /root/pkg.txt
