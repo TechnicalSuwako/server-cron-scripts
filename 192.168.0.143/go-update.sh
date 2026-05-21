@@ -42,6 +42,7 @@ else
   ln -s /usr/local/bin/gofmt$SER /usr/local/bin/gofmt
   go version >> /root/go.txt
   rm -rfv go$VER.$OS-$ARC.tar.gz >> /root/go.txt
+  echo "Goバージョンを更新に成功です。" >> /root/go.txt
 fi
 
 cat /root/go.txt | mail -s "${IP} Goバージョン更新 (${DATE})" reports@076.ne.jp
